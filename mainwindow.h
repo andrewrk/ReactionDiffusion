@@ -51,6 +51,8 @@ private:
     void setControlEnableStates();
     void setUpFrameSkipCombo(int n);
 
+    inline int indexOf(int x, int y){ return y * m_width + x; }
+
 private slots:
     void on_btn_next_clicked();
     void on_combo_mode_currentIndexChanged(int index);

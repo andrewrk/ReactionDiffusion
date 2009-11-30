@@ -5,6 +5,7 @@
 #include <QtGui/QPixmap>
 
 #include <cstdlib>
+#include <cstring>
 using namespace std;
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -116,15 +117,15 @@ void MainWindow::setControlEnableStates()
 void MainWindow::cleanupBuffers()
 {
     if( m_a ) {
-        delete m_a;
+        delete[] m_a;
         m_a = NULL;
     }
     if( m_b ) {
-        delete m_b;
+        delete[] m_b;
         m_a = NULL;
     }
     if( m_betas ) {
-        delete m_betas;
+        delete[] m_betas;
         m_betas = NULL;
     }
 }
@@ -143,9 +144,10 @@ void MainWindow::reset()
     m_a = new double[m_width * m_height];
     m_b = new double[m_width * m_height];
 
+
     for(int y=0; y<m_height; ++y) {
         for(int x=0; x<m_width; ++x) {
-            int this_index = y * m_width + x;
+            int this_index = indexOf(x,y);
             m_betas[this_index] = 12.0 + rand() / (double) RAND_MAX;
             m_a[this_index] = 4.0;
             m_b[this_index] = 4.0;
@@ -173,6 +175,37 @@ void MainWindow::nextFrame()
 
 void MainWindow::computeThisFrame()
 {
+    double deltaT = 0.5;
+
+    double * old_a = new double[m_width * m_height];
+    double * old_b = new double[m_width * m_height];
+
+    memcpy(old_a, m_a, sizeof(double) * m_width * m_height);
+    memcpy(old_b, m_b, sizeof(double) * m_width * m_height);
+
+    for(int y=0; y<m_height; ++y){
+        for(int x=0; x<m_width; ++x){
+            int this_index = indexOf(x,y);
+            double a = old_a[this_index];
+            double b = old_b[this_index];
+            double beta = m_betas[this_index];
+            m_a[this_index] += m_s * (16.0 - a * b) + m_Da * (
+                    old_a[indexOf((x+m_width+1)%m_width, y)] +
+                    old_a[indexOf((x+m_width-1)%m_width, y)] +
+                    old_a[indexOf(x, (y+m_height+1)%m_height)] +
+                    old_a[indexOf(x, (y+m_height-1)%m_height)] -
+                    4.0 * a);
+            m_b[this_index] += m_s * (a * b - b - beta) + m_Db * (
+                    old_b[indexOf((x+m_width+1)%m_width, y)] +
+                    old_b[indexOf((x+m_width-1)%m_width, y)] +
+                    old_b[indexOf(x, (y+m_height+1)%m_height)] +
+                    old_b[indexOf(x, (y+m_height-1)%m_height)] -
+                    4.0 * b);
+        }
+    }
+
+    delete[] old_a;
+    delete[] old_b;
 
 }
 
@@ -184,7 +217,7 @@ void MainWindow::renderImage()
 
     for(int y=0; y<m_height; ++y) {
         for( int x=0; x<m_width; ++x) {
-            int this_index = y * m_width + x;
+            int this_index = indexOf(x,y);
             double a = m_a[this_index];
             double b = m_b[this_index];
             m_img->setPixel(x,y,qRgb(a/(a+b) * 255.0, 0, b/(a+b) * 255.0));
