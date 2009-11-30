@@ -5,8 +5,6 @@ QT += opengl
 TARGET = ReactionDiffusion
 TEMPLATE = app
 SOURCES += main.cpp \
-    mainwindow.cpp \
-    drawpane.cpp
-HEADERS += mainwindow.h \
-    drawpane.h
+    mainwindow.cpp
+HEADERS += mainwindow.h
 FORMS += mainwindow.ui

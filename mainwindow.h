@@ -1,8 +1,6 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include "drawpane.h"
-
 #include <QtGui/QMainWindow>
 
 namespace Ui
@@ -18,9 +16,24 @@ public:
     MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
+
 private:
     Ui::MainWindow *ui;
-    DrawPane * m_drawPane;
+
+    // what frame we're on
+    int m_frame;
+    int m_frameSkip;
+    int m_startFrame;
+
+
+    double m_s, m_Da, m_Db, m_betaError;
+
+    void computeThisFrame();
+    void reset();
+    void nextFrame();
+    void setFrameSkip(int n);
+    void setStartFrame(int n);
+
 
     void setTextValues();
 

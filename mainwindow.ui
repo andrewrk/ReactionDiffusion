@@ -267,19 +267,6 @@
      <string>Draw</string>
     </property>
    </widget>
-   <widget class="QWidget" name="widget_out" native="true">
-    <property name="geometry">
-     <rect>
-      <x>267</x>
-      <y>31</y>
-      <width>280</width>
-      <height>280</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string>background-color: rgb(248, 37, 255);</string>
-    </property>
-   </widget>
    <widget class="QPlainTextEdit" name="text_frameSkip">
     <property name="geometry">
      <rect>
@@ -301,6 +288,19 @@
     </property>
     <property name="text">
      <string>frames</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_out">
+    <property name="geometry">
+     <rect>
+      <x>258</x>
+      <y>27</y>
+      <width>280</width>
+      <height>280</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
     </property>
    </widget>
   </widget>

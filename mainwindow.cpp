@@ -8,13 +8,6 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
     setTextValues();
-
-    // add the opengl widget
-    ui->widget_out->setVisible(false);
-
-    m_drawPane = new DrawPane(this);
-    this->layout()->addWidget(m_drawPane);
-    m_drawPane->setGeometry(ui->widget_out->geometry());
 }
 
 MainWindow::~MainWindow()
@@ -52,36 +45,60 @@ void MainWindow::on_slider_betaError_valueChanged(int value)
 
 void MainWindow::on_btn_draw_clicked()
 {
-    m_drawPane->setParams(ui->text_s->toPlainText().toDouble(),
-                          ui->text_Da->toPlainText().toDouble(),
-                          ui->text_Db->toPlainText().toDouble(),
-                          ui->text_BetaError->toPlainText().toDouble());
+    m_s = ui->text_s->toPlainText().toDouble();
+    m_Da = ui->text_Da->toPlainText().toDouble();
+    m_Db = ui->text_Db->toPlainText().toDouble();
+    m_betaError = ui->text_BetaError->toPlainText().toDouble();
+
 
     switch(ui->combo_mode->currentIndex())
     {
         case 0: // skip t to the end
-            m_drawPane->setFrameSkip(1);
-            m_drawPane->setStartFrame(2000);
+            m_frameSkip = 1;
+            m_startFrame = 2000;
             break;
         case 1: // frame skip by n
-            m_drawPane->setFrameSkip(ui->text_frameSkip->toPlainText().toInt());
-            m_drawPane->setStartFrame(0);
+            m_frameSkip = ui->text_frameSkip->toPlainText().toInt();
+            m_startFrame = 0;
             break;
         case 2: // start at beginning
-            m_drawPane->setFrameSkip(1);
-            m_drawPane->setStartFrame(0);
+            m_frameSkip = 1;
+            m_startFrame = 0;
             break;
         default:
-            throw NULL;
+            throw "invalid combo box index";
     }
 
-    m_drawPane->reset();
-    m_drawPane->updateGL();
+    reset();
 }
 
 void MainWindow::on_combo_mode_currentIndexChanged(int index)
 {
     ui->text_frameSkip->setVisible(index == 1);
     ui->lbl_frameSkip->setVisible(index == 1);
+
+}
+
+
+void MainWindow::reset()
+{
+    m_frame = 0;
+    for(int i=0; i<m_startFrame; ++i){
+        computeThisFrame();
+        ++m_frame;
+    }
+}
+
+void MainWindow::nextFrame()
+{
+    for(int i=0; i<m_frameSkip; ++i) {
+        computeThisFrame();
+        ++m_frame;
+    }
+
+}
+
+void MainWindow::computeThisFrame()
+{
 
 }
