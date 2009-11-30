@@ -8,6 +8,54 @@
 #include <cstring>
 using namespace std;
 
+const double MainWindow::presets_Da[] = {
+    0.25,
+    0.25,
+    0.25,
+    0.075,
+    0.25,
+    0.25,
+    0.25,
+    0.391,
+    0.25
+};
+
+ const double MainWindow::presets_Db[] = {
+    0.0625,
+    0.0625,
+    0.0625,
+    0.04286,
+    0.0625,
+    0.0625,
+    0.0625,
+    0.02477,
+    0.0625
+};
+
+const double MainWindow::presets_s[] = {
+    0.05,
+    0.005,
+    0.2,
+    0.04286,
+    0.05,
+    0.05,
+    0.2,
+    0.00902,
+    0.05
+};
+
+const double MainWindow::presets_betaError[] = {
+    0.1,
+    0.1,
+    0.1,
+    4.4359,
+    0.1,
+    3,
+    3,
+    3,
+    3
+};
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent), ui(new Ui::MainWindow),
     m_frameSkip(1),
@@ -21,6 +69,7 @@ MainWindow::MainWindow(QWidget *parent) :
     setControlEnableStates();
 
     setUpFrameSkipCombo(15);
+    applyPreset(0);
 }
 
 MainWindow::~MainWindow()
@@ -44,32 +93,32 @@ void MainWindow::setUpFrameSkipCombo(int n)
 
 void MainWindow::setTextValues()
 {
-    ui->text_s->setPlainText(QString::number(ui->slider_s->value()/100000.0f));
-    ui->text_Da->setPlainText(QString::number(ui->slider_Da->value()/1000.0f));
-    ui->text_Db->setPlainText(QString::number(ui->slider_Db->value()/100000.0f));
-    ui->text_BetaError->setPlainText(QString::number(ui->slider_betaError->value()/10000.0f));
+    ui->text_s->setPlainText(QString::number(ui->slider_s->value()/100000.0));
+    ui->text_Da->setPlainText(QString::number(ui->slider_Da->value()/1000.0));
+    ui->text_Db->setPlainText(QString::number(ui->slider_Db->value()/100000.0));
+    ui->text_BetaError->setPlainText(QString::number(ui->slider_betaError->value()/10000.0));
 
     ui->combo_frameSkip->setCurrentIndex(m_frameSkip-1);
 }
 
 void MainWindow::on_slider_s_valueChanged(int value)
 {
-    ui->text_s->setPlainText(QString::number(value/100000.0f));
+    ui->text_s->setPlainText(QString::number(value/100000.0));
 }
 
 void MainWindow::on_slider_Da_valueChanged(int value)
 {
-    ui->text_Da->setPlainText(QString::number(value/1000.0f));
+    ui->text_Da->setPlainText(QString::number(value/1000.0));
 }
 
 void MainWindow::on_slider_Db_valueChanged(int value)
 {
-    ui->text_Db->setPlainText(QString::number(value/100000.0f));
+    ui->text_Db->setPlainText(QString::number(value/100000.0));
 }
 
 void MainWindow::on_slider_betaError_valueChanged(int value)
 {
-    ui->text_BetaError->setPlainText(QString::number(value/10000.0f));
+    ui->text_BetaError->setPlainText(QString::number(value/10000.0));
 }
 
 void MainWindow::on_btn_draw_clicked()
@@ -104,9 +153,15 @@ void MainWindow::on_btn_draw_clicked()
     nextFrame();
 }
 
-void MainWindow::on_combo_mode_currentIndexChanged(int)
+void MainWindow::on_combo_mode_currentIndexChanged(int index)
 {
     setControlEnableStates();
+
+    if( index == 1 )
+        m_frameSkip = 1;
+    else if( index == 2 )
+        m_frameSkip = ui->combo_frameSkip->currentIndex() + 1;
+
 }
 
 void MainWindow::setControlEnableStates()
@@ -161,11 +216,14 @@ void MainWindow::reset()
 
 void MainWindow::goFrames(int n)
 {
+    QString nstr = QString::number(n);
     for(int i=0; i<n; ++i){
         computeThisFrame();
         ++m_frame;
-        ui->label_frame->setText(tr("Frame: ") + QString::number(m_frame));
+        ui->label_frame->setText(tr("Frame: ") + QString::number(m_frame) + QString(" / ") + nstr);
+        ui->label_frame->repaint();
     }
+    ui->label_frame->setText(tr("Frame: ") + QString::number(m_frame));
 }
 
 void MainWindow::nextFrame()
@@ -256,4 +314,27 @@ void MainWindow::on_btn_next_clicked()
 void MainWindow::on_combo_frameSkip_currentIndexChanged(int index)
 {
     m_frameSkip = index + 1;
+}
+
+void MainWindow::on_combo_presets_currentIndexChanged(int index)
+{
+    if( index > 0 )
+        applyPreset(index);
+}
+
+void MainWindow::applyPreset(int index)
+{
+    ui->text_s->setPlainText(QString::number(presets_s[index]));
+    ui->text_Da->setPlainText(QString::number(presets_Da[index]));
+    ui->text_Db->setPlainText(QString::number(presets_Db[index]));
+    ui->text_BetaError->setPlainText(QString::number(presets_betaError[index]));
+
+}
+
+void MainWindow::on_text_s_textChanged()
+{
+    ui->slider_s->setValue((int)(ui->text_s->toPlainText().toDouble() * 100000.0));
+    ui->slider_Da->setValue((int)(ui->text_Da->toPlainText().toDouble() * 1000.0));
+    ui->slider_Db->setValue((int)(ui->text_Db->toPlainText().toDouble() * 100000.0));
+    ui->slider_betaError->setValue((int)(ui->text_BetaError->toPlainText().toDouble() * 10000.0));
 }

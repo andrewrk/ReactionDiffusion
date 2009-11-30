@@ -23,6 +23,12 @@ protected:
 private:
     Ui::MainWindow *ui;
 
+    static const double presets_Da[];
+    static const double presets_Db[];
+    static const double presets_s[];
+    static const double presets_betaError[];
+
+
     // what frame we're on
     int m_frame;
     int m_frameSkip;
@@ -53,7 +59,11 @@ private:
 
     inline int indexOf(int x, int y){ return y * m_width + x; }
 
+    void applyPreset(int index);
+
 private slots:
+    void on_text_s_textChanged();
+    void on_combo_presets_currentIndexChanged(int index);
     void on_combo_frameSkip_currentIndexChanged(int index);
     void on_btn_next_clicked();
     void on_combo_mode_currentIndexChanged(int index);
