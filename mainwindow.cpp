@@ -2,17 +2,30 @@
 #include "ui_mainwindow.h"
 
 #include <QtGui/QLayout>
+#include <QtGui/QPixmap>
 
-MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent), ui(new Ui::MainWindow)
+MainWindow::MainWindow(QWidget *parent) :
+    QMainWindow(parent), ui(new Ui::MainWindow),
+    m_frameSkip(1)
 {
     ui->setupUi(this);
     setTextValues();
+    setControlEnableStates();
+
+    setUpFrameSkipCombo(15);
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::setUpFrameSkipCombo(int n)
+{
+    ui->combo_frameSkip->clear();
+    for(int i=0; i<n; ++i){
+        ui->combo_frameSkip->addItem(QString::number(i+1) + QString(" frames"));
+    }
 }
 
 void MainWindow::setTextValues()
@@ -21,6 +34,8 @@ void MainWindow::setTextValues()
     ui->text_Da->setPlainText(QString::number(ui->slider_Da->value()/1000.0f));
     ui->text_Db->setPlainText(QString::number(ui->slider_Db->value()/100000.0f));
     ui->text_BetaError->setPlainText(QString::number(ui->slider_betaError->value()/10000.0f));
+
+    ui->combo_frameSkip->setCurrentIndex(m_frameSkip-1);
 }
 
 void MainWindow::on_slider_s_valueChanged(int value)
@@ -58,7 +73,7 @@ void MainWindow::on_btn_draw_clicked()
             m_startFrame = 2000;
             break;
         case 1: // frame skip by n
-            m_frameSkip = ui->text_frameSkip->toPlainText().toInt();
+            m_frameSkip = ui->combo_frameSkip->currentIndex() + 1;
             m_startFrame = 0;
             break;
         case 2: // start at beginning
@@ -72,11 +87,14 @@ void MainWindow::on_btn_draw_clicked()
     reset();
 }
 
-void MainWindow::on_combo_mode_currentIndexChanged(int index)
+void MainWindow::on_combo_mode_currentIndexChanged(int)
 {
-    ui->text_frameSkip->setVisible(index == 1);
-    ui->lbl_frameSkip->setVisible(index == 1);
+    setControlEnableStates();
+}
 
+void MainWindow::setControlEnableStates()
+{
+    ui->combo_frameSkip->setVisible(ui->combo_mode->currentIndex() == 1);
 }
 
 
@@ -96,9 +114,18 @@ void MainWindow::nextFrame()
         ++m_frame;
     }
 
+    renderImage();
 }
 
 void MainWindow::computeThisFrame()
 {
 
+}
+
+void MainWindow::renderImage()
+{
+    // render into the qimage
+
+    // display the qimage
+    ui->label_out->setPixmap(QPixmap::fromImage(*m_img));
 }

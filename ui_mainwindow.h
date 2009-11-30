@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading ui file 'mainwindow.ui'
 **
-** Created: Mon Nov 30 01:34:41 2009
+** Created: Mon Nov 30 02:03:12 2009
 **      by: Qt User Interface Compiler version 4.5.3
 **
 ** WARNING! All changes made in this file will be lost when recompiling ui file!
@@ -46,9 +46,8 @@ public:
     QPlainTextEdit *text_Db;
     QPlainTextEdit *text_BetaError;
     QPushButton *btn_draw;
-    QPlainTextEdit *text_frameSkip;
-    QLabel *lbl_frameSkip;
     QLabel *label_out;
+    QComboBox *combo_frameSkip;
 
     void setupUi(QMainWindow *MainWindow)
     {
@@ -123,15 +122,12 @@ public:
         btn_draw = new QPushButton(centralWidget);
         btn_draw->setObjectName(QString::fromUtf8("btn_draw"));
         btn_draw->setGeometry(QRect(150, 280, 98, 28));
-        text_frameSkip = new QPlainTextEdit(centralWidget);
-        text_frameSkip->setObjectName(QString::fromUtf8("text_frameSkip"));
-        text_frameSkip->setGeometry(QRect(12, 314, 126, 29));
-        lbl_frameSkip = new QLabel(centralWidget);
-        lbl_frameSkip->setObjectName(QString::fromUtf8("lbl_frameSkip"));
-        lbl_frameSkip->setGeometry(QRect(152, 319, 68, 18));
         label_out = new QLabel(centralWidget);
         label_out->setObjectName(QString::fromUtf8("label_out"));
         label_out->setGeometry(QRect(258, 27, 280, 280));
+        combo_frameSkip = new QComboBox(centralWidget);
+        combo_frameSkip->setObjectName(QString::fromUtf8("combo_frameSkip"));
+        combo_frameSkip->setGeometry(QRect(10, 313, 132, 28));
         MainWindow->setCentralWidget(centralWidget);
 
         retranslateUi(MainWindow);
@@ -156,7 +152,6 @@ public:
         label_2->setText(QApplication::translate("MainWindow", "Da", 0, QApplication::UnicodeUTF8));
         text_s->setPlainText(QApplication::translate("MainWindow", "12", 0, QApplication::UnicodeUTF8));
         btn_draw->setText(QApplication::translate("MainWindow", "Draw", 0, QApplication::UnicodeUTF8));
-        lbl_frameSkip->setText(QApplication::translate("MainWindow", "frames", 0, QApplication::UnicodeUTF8));
         label_out->setText(QString());
         Q_UNUSED(MainWindow);
     } // retranslateUi

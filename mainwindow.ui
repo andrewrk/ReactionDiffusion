@@ -267,29 +267,6 @@
      <string>Draw</string>
     </property>
    </widget>
-   <widget class="QPlainTextEdit" name="text_frameSkip">
-    <property name="geometry">
-     <rect>
-      <x>12</x>
-      <y>314</y>
-      <width>126</width>
-      <height>29</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QLabel" name="lbl_frameSkip">
-    <property name="geometry">
-     <rect>
-      <x>152</x>
-      <y>319</y>
-      <width>68</width>
-      <height>18</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>frames</string>
-    </property>
-   </widget>
    <widget class="QLabel" name="label_out">
     <property name="geometry">
      <rect>
@@ -301,6 +278,16 @@
     </property>
     <property name="text">
      <string/>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="combo_frameSkip">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>313</y>
+      <width>132</width>
+      <height>28</height>
+     </rect>
     </property>
    </widget>
   </widget>

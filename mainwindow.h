@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QtGui/QMainWindow>
+#include <QtGui/QImage>
 
 namespace Ui
 {
@@ -25,6 +26,12 @@ private:
     int m_frameSkip;
     int m_startFrame;
 
+    QImage * m_img;
+    double * m_a;
+    double * m_b;
+    double * m_betas;
+
+
 
     double m_s, m_Da, m_Db, m_betaError;
 
@@ -33,9 +40,11 @@ private:
     void nextFrame();
     void setFrameSkip(int n);
     void setStartFrame(int n);
-
+    void renderImage();
 
     void setTextValues();
+    void setControlEnableStates();
+    void setUpFrameSkipCombo(int n);
 
 private slots:
     void on_combo_mode_currentIndexChanged(int index);
