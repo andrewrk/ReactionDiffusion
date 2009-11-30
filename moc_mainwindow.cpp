@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'mainwindow.h'
 **
-** Created: Mon Nov 30 03:26:27 2009
+** Created: Mon Nov 30 12:51:27 2009
 **      by: The Qt Meta Object Compiler version 61 (Qt 4.5.3)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -23,26 +23,29 @@ static const uint qt_meta_data_MainWindow[] = {
        2,       // revision
        0,       // classname
        0,    0, // classinfo
-       7,   12, // methods
+       8,   12, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
 
  // slots: signature, parameters, type, tag, flags
-      12,   11,   11,   11, 0x08,
-      40,   34,   11,   11, 0x08,
-      79,   11,   11,   11, 0x08,
-     107,  101,   11,   11, 0x08,
-     145,  101,   11,   11, 0x08,
-     176,  101,   11,   11, 0x08,
-     207,  101,   11,   11, 0x08,
+      18,   12,   11,   11, 0x08,
+      62,   11,   11,   11, 0x08,
+      84,   12,   11,   11, 0x08,
+     123,   11,   11,   11, 0x08,
+     151,  145,   11,   11, 0x08,
+     189,  145,   11,   11, 0x08,
+     220,  145,   11,   11, 0x08,
+     251,  145,   11,   11, 0x08,
 
        0        // eod
 };
 
 static const char qt_meta_stringdata_MainWindow[] = {
-    "MainWindow\0\0on_btn_next_clicked()\0"
-    "index\0on_combo_mode_currentIndexChanged(int)\0"
+    "MainWindow\0\0index\0"
+    "on_combo_frameSkip_currentIndexChanged(int)\0"
+    "on_btn_next_clicked()\0"
+    "on_combo_mode_currentIndexChanged(int)\0"
     "on_btn_draw_clicked()\0value\0"
     "on_slider_betaError_valueChanged(int)\0"
     "on_slider_Db_valueChanged(int)\0"
@@ -75,16 +78,17 @@ int MainWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
         switch (_id) {
-        case 0: on_btn_next_clicked(); break;
-        case 1: on_combo_mode_currentIndexChanged((*reinterpret_cast< int(*)>(_a[1]))); break;
-        case 2: on_btn_draw_clicked(); break;
-        case 3: on_slider_betaError_valueChanged((*reinterpret_cast< int(*)>(_a[1]))); break;
-        case 4: on_slider_Db_valueChanged((*reinterpret_cast< int(*)>(_a[1]))); break;
-        case 5: on_slider_Da_valueChanged((*reinterpret_cast< int(*)>(_a[1]))); break;
-        case 6: on_slider_s_valueChanged((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 0: on_combo_frameSkip_currentIndexChanged((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 1: on_btn_next_clicked(); break;
+        case 2: on_combo_mode_currentIndexChanged((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 3: on_btn_draw_clicked(); break;
+        case 4: on_slider_betaError_valueChanged((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 5: on_slider_Db_valueChanged((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 6: on_slider_Da_valueChanged((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 7: on_slider_s_valueChanged((*reinterpret_cast< int(*)>(_a[1]))); break;
         default: ;
         }
-        _id -= 7;
+        _id -= 8;
     }
     return _id;
 }

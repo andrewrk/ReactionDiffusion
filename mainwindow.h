@@ -54,6 +54,7 @@ private:
     inline int indexOf(int x, int y){ return y * m_width + x; }
 
 private slots:
+    void on_combo_frameSkip_currentIndexChanged(int index);
     void on_btn_next_clicked();
     void on_combo_mode_currentIndexChanged(int index);
     void on_btn_draw_clicked();

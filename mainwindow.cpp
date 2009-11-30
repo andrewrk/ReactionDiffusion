@@ -84,7 +84,7 @@ void MainWindow::on_btn_draw_clicked()
     {
         case 0: // skip t to the end
             m_frameSkip = 1;
-            m_startFrame = 2000;
+            m_startFrame = 300;
             break;
         case 1: // frame skip by n
             m_frameSkip = ui->combo_frameSkip->currentIndex() + 1;
@@ -112,6 +112,7 @@ void MainWindow::on_combo_mode_currentIndexChanged(int)
 void MainWindow::setControlEnableStates()
 {
     ui->combo_frameSkip->setVisible(ui->combo_mode->currentIndex() == 1);
+    ui->btn_next->setVisible(ui->combo_mode->currentIndex() != 0);
 }
 
 void MainWindow::cleanupBuffers()
@@ -163,6 +164,7 @@ void MainWindow::goFrames(int n)
     for(int i=0; i<n; ++i){
         computeThisFrame();
         ++m_frame;
+        ui->label_frame->setText(tr("Frame: ") + QString::number(m_frame));
     }
 }
 
@@ -177,39 +179,45 @@ void MainWindow::computeThisFrame()
 {
     double deltaT = 0.5;
 
-    double * old_a = new double[m_width * m_height];
-    double * old_b = new double[m_width * m_height];
+    double step = 0.0;
+    while( step < 1.0 ) {
 
-    memcpy(old_a, m_a, sizeof(double) * m_width * m_height);
-    memcpy(old_b, m_b, sizeof(double) * m_width * m_height);
+        double * old_a = new double[m_width * m_height];
+        double * old_b = new double[m_width * m_height];
 
-    for(int y=0; y<m_height; ++y){
-        for(int x=0; x<m_width; ++x){
-            int this_index = indexOf(x,y);
-            double a = old_a[this_index];
-            double b = old_b[this_index];
-            double beta = m_betas[this_index];
-            m_a[this_index] += m_s * (16.0 - a * b) + m_Da * (
-                    old_a[indexOf((x+m_width+1)%m_width, y)] +
-                    old_a[indexOf((x+m_width-1)%m_width, y)] +
-                    old_a[indexOf(x, (y+m_height+1)%m_height)] +
-                    old_a[indexOf(x, (y+m_height-1)%m_height)] -
-                    4.0 * a);
-            m_b[this_index] += m_s * (a * b - b - beta) + m_Db * (
-                    old_b[indexOf((x+m_width+1)%m_width, y)] +
-                    old_b[indexOf((x+m_width-1)%m_width, y)] +
-                    old_b[indexOf(x, (y+m_height+1)%m_height)] +
-                    old_b[indexOf(x, (y+m_height-1)%m_height)] -
-                    4.0 * b);
+        memcpy(old_a, m_a, sizeof(double) * m_width * m_height);
+        memcpy(old_b, m_b, sizeof(double) * m_width * m_height);
 
-            // clamp chemicals at 0
-            if( m_a[this_index] < 0 ) m_a[this_index] = 0;
-            if( m_b[this_index] < 0 ) m_b[this_index] = 0;
+        for(int y=0; y<m_height; ++y){
+            for(int x=0; x<m_width; ++x){
+                int this_index = indexOf(x,y);
+                double a = old_a[this_index];
+                double b = old_b[this_index];
+                double beta = m_betas[this_index];
+                m_a[this_index] += deltaT * (m_s * (16.0 - a * b) + m_Da * (
+                        old_a[indexOf((x+m_width+1)%m_width, y)] +
+                        old_a[indexOf((x+m_width-1)%m_width, y)] +
+                        old_a[indexOf(x, (y+m_height+1)%m_height)] +
+                        old_a[indexOf(x, (y+m_height-1)%m_height)] -
+                        4.0 * a));
+                m_b[this_index] += deltaT * (m_s * (a * b - b - beta) + m_Db * (
+                        old_b[indexOf((x+m_width+1)%m_width, y)] +
+                        old_b[indexOf((x+m_width-1)%m_width, y)] +
+                        old_b[indexOf(x, (y+m_height+1)%m_height)] +
+                        old_b[indexOf(x, (y+m_height-1)%m_height)] -
+                        4.0 * b));
+
+                // clamp chemicals at 0
+                if( m_a[this_index] < 0 ) m_a[this_index] = 0;
+                if( m_b[this_index] < 0 ) m_b[this_index] = 0;
+            }
         }
-    }
 
-    delete[] old_a;
-    delete[] old_b;
+        delete[] old_a;
+        delete[] old_b;
+
+        step += deltaT;
+    }
 
 }
 
@@ -243,4 +251,9 @@ void MainWindow::keyPressEvent(QKeyEvent * event)
 void MainWindow::on_btn_next_clicked()
 {
     nextFrame();
+}
+
+void MainWindow::on_combo_frameSkip_currentIndexChanged(int index)
+{
+    m_frameSkip = index + 1;
 }

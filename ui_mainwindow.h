@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading ui file 'mainwindow.ui'
 **
-** Created: Mon Nov 30 02:58:04 2009
+** Created: Mon Nov 30 12:49:50 2009
 **      by: Qt User Interface Compiler version 4.5.3
 **
 ** WARNING! All changes made in this file will be lost when recompiling ui file!
@@ -49,6 +49,7 @@ public:
     QLabel *label_out;
     QComboBox *combo_frameSkip;
     QPushButton *btn_next;
+    QLabel *label_frame;
 
     void setupUi(QMainWindow *MainWindow)
     {
@@ -132,6 +133,10 @@ public:
         btn_next = new QPushButton(centralWidget);
         btn_next->setObjectName(QString::fromUtf8("btn_next"));
         btn_next->setGeometry(QRect(149, 313, 98, 28));
+        label_frame = new QLabel(centralWidget);
+        label_frame->setObjectName(QString::fromUtf8("label_frame"));
+        label_frame->setGeometry(QRect(298, 3, 211, 20));
+        label_frame->setAlignment(Qt::AlignCenter);
         MainWindow->setCentralWidget(centralWidget);
 
         retranslateUi(MainWindow);
@@ -158,6 +163,7 @@ public:
         btn_draw->setText(QApplication::translate("MainWindow", "&Draw", 0, QApplication::UnicodeUTF8));
         label_out->setText(QString());
         btn_next->setText(QApplication::translate("MainWindow", "&Next", 0, QApplication::UnicodeUTF8));
+        label_frame->setText(QApplication::translate("MainWindow", "Frame: 0", 0, QApplication::UnicodeUTF8));
         Q_UNUSED(MainWindow);
     } // retranslateUi
 
