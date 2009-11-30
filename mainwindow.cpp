@@ -201,6 +201,10 @@ void MainWindow::computeThisFrame()
                     old_b[indexOf(x, (y+m_height+1)%m_height)] +
                     old_b[indexOf(x, (y+m_height-1)%m_height)] -
                     4.0 * b);
+
+            // clamp chemicals at 0
+            if( m_a[this_index] < 0 ) m_a[this_index] = 0;
+            if( m_b[this_index] < 0 ) m_b[this_index] = 0;
         }
     }
 
