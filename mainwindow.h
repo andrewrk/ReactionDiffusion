@@ -17,6 +17,8 @@ public:
     MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
+protected:
+    void keyPressEvent(QKeyEvent * event);
 
 private:
     Ui::MainWindow *ui;
@@ -31,6 +33,7 @@ private:
     double * m_b;
     double * m_betas;
 
+    int m_width, m_height;
 
 
     double m_s, m_Da, m_Db, m_betaError;
@@ -41,12 +44,15 @@ private:
     void setFrameSkip(int n);
     void setStartFrame(int n);
     void renderImage();
+    void cleanupBuffers();
+    void goFrames(int n);
 
     void setTextValues();
     void setControlEnableStates();
     void setUpFrameSkipCombo(int n);
 
 private slots:
+    void on_btn_next_clicked();
     void on_combo_mode_currentIndexChanged(int index);
     void on_btn_draw_clicked();
     void on_slider_betaError_valueChanged(int value);

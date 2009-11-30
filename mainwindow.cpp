@@ -4,9 +4,16 @@
 #include <QtGui/QLayout>
 #include <QtGui/QPixmap>
 
+#include <cstdlib>
+using namespace std;
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent), ui(new Ui::MainWindow),
-    m_frameSkip(1)
+    m_frameSkip(1),
+    m_img(NULL),
+    m_a(NULL),
+    m_b(NULL),
+    m_betas(NULL)
 {
     ui->setupUi(this);
     setTextValues();
@@ -18,6 +25,12 @@ MainWindow::MainWindow(QWidget *parent) :
 MainWindow::~MainWindow()
 {
     delete ui;
+    cleanupBuffers();
+
+    if( m_img ) {
+        delete m_img;
+        m_img = NULL;
+    }
 }
 
 void MainWindow::setUpFrameSkipCombo(int n)
@@ -85,6 +98,9 @@ void MainWindow::on_btn_draw_clicked()
     }
 
     reset();
+
+    // go to first frame
+    nextFrame();
 }
 
 void MainWindow::on_combo_mode_currentIndexChanged(int)
@@ -97,11 +113,52 @@ void MainWindow::setControlEnableStates()
     ui->combo_frameSkip->setVisible(ui->combo_mode->currentIndex() == 1);
 }
 
+void MainWindow::cleanupBuffers()
+{
+    if( m_a ) {
+        delete m_a;
+        m_a = NULL;
+    }
+    if( m_b ) {
+        delete m_b;
+        m_a = NULL;
+    }
+    if( m_betas ) {
+        delete m_betas;
+        m_betas = NULL;
+    }
+}
+
 
 void MainWindow::reset()
 {
+    m_width = ui->label_out->width();
+    m_height = ui->label_out->height();
+
     m_frame = 0;
-    for(int i=0; i<m_startFrame; ++i){
+
+    // initialize a, b, and beta
+    cleanupBuffers();
+    m_betas = new double[m_width * m_height];
+    m_a = new double[m_width * m_height];
+    m_b = new double[m_width * m_height];
+
+    for(int y=0; y<m_height; ++y) {
+        for(int x=0; x<m_width; ++x) {
+            int this_index = y * m_width + x;
+            m_betas[this_index] = 12.0 + rand() / (double) RAND_MAX;
+            m_a[this_index] = 4.0;
+            m_b[this_index] = 4.0;
+        }
+    }
+
+
+    goFrames(m_startFrame);
+}
+
+void MainWindow::goFrames(int n)
+{
+    for(int i=0; i<n; ++i){
         computeThisFrame();
         ++m_frame;
     }
@@ -109,10 +166,7 @@ void MainWindow::reset()
 
 void MainWindow::nextFrame()
 {
-    for(int i=0; i<m_frameSkip; ++i) {
-        computeThisFrame();
-        ++m_frame;
-    }
+    goFrames(m_frameSkip);
 
     renderImage();
 }
@@ -125,7 +179,31 @@ void MainWindow::computeThisFrame()
 void MainWindow::renderImage()
 {
     // render into the qimage
+    if( ! m_img )
+        m_img = new QImage(m_width, m_height, QImage::Format_RGB32);
+
+    for(int y=0; y<m_height; ++y) {
+        for( int x=0; x<m_width; ++x) {
+            int this_index = y * m_width + x;
+            double a = m_a[this_index];
+            double b = m_b[this_index];
+            m_img->setPixel(x,y,qRgb(a/(a+b) * 255.0, 0, b/(a+b) * 255.0));
+        }
+    }
 
     // display the qimage
     ui->label_out->setPixmap(QPixmap::fromImage(*m_img));
+}
+
+void MainWindow::keyPressEvent(QKeyEvent * event)
+{
+    if(event->key() == Qt::Key_Space) {
+        nextFrame();
+        event->accept();
+    }
+}
+
+void MainWindow::on_btn_next_clicked()
+{
+    nextFrame();
 }

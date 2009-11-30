@@ -264,7 +264,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>Draw</string>
+     <string>&amp;Draw</string>
     </property>
    </widget>
    <widget class="QLabel" name="label_out">
@@ -288,6 +288,19 @@
       <width>132</width>
       <height>28</height>
      </rect>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btn_next">
+    <property name="geometry">
+     <rect>
+      <x>149</x>
+      <y>313</y>
+      <width>98</width>
+      <height>28</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>&amp;Next</string>
     </property>
    </widget>
   </widget>
