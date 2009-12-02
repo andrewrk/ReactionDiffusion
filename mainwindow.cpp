@@ -204,7 +204,7 @@ void MainWindow::reset()
     for(int y=0; y<m_height; ++y) {
         for(int x=0; x<m_width; ++x) {
             int this_index = indexOf(x,y);
-            m_betas[this_index] = 12.0 + rand() / (double) RAND_MAX;
+            m_betas[this_index] = 12.0 + (rand() / (double) RAND_MAX) * (2 * m_betaError) - m_betaError;
             m_a[this_index] = 4.0;
             m_b[this_index] = 4.0;
         }
